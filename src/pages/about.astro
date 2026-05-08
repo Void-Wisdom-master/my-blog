@@ -1,24 +1,32 @@
 ---
-import AboutHeroImage from "../assets/cat.webp";
-import Layout from "../layouts/BlogPost.astro";
-const pageTitle = "关于为什么写博客";
+import { Image } from "astro:assets";
+import AboutHeroImage from "../assets/buchun.jpg";
+import Layout from "../layouts/AboutLayout.astro";
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <Layout
-	title="About Why to write"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date("May 06 2026")}
-	heroImage={AboutHeroImage}
+	title={t('nav.about')}
+	description="关于我的不春山。"
 >
-	<p>
-		First at all, to write something is my hobby, and than, i`d like to try
-		some new to entertain oneself.
-	</p>
+	<Image slot="image" src={AboutHeroImage} alt="Profile" />
 
-	<p>
-		In this, I`d like to write some article to record my game or thoughts,
-		of course, practice English proficiency is also important.
-	</p>
+	<section>
+		<h2>为什么写博客？</h2>
+		<p>
+			写文章是我的一个长期爱好。我喜欢尝试新鲜事物。
+			在这个角落，我记录我的游戏心得、突发奇想，当然，练习英文也是一个重要的动力。
+		</p>
 
-	<p>I will also record my learning road, just like AI........</p>
+		<h2>我的路径</h2>
+		<p>
+			我目前正走在学习的道路上，特别是对 AI 领域的探索。
+			在这个快速变化的时代，写作能让我慢下来，去思考那些“永恒”的东西。
+		</p>
+		
+		<p>这里不仅是一个记录本，更是一个我与世界对话的微小窗口。</p>
+	</section>
 </Layout>

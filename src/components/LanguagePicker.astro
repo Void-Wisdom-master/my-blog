@@ -1,0 +1,55 @@
+---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl, useTranslatedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const translatePath = useTranslatedPath(lang);
+
+// Logic to determine the alternative path
+// For now, just toggles between / and /en/
+const currentPath = Astro.url.pathname;
+const isDefault = lang === 'zh';
+const targetLang = isDefault ? 'en' : 'zh';
+
+// Simple path toggle logic for the demo
+let targetPath = currentPath;
+if (isDefault) {
+  targetPath = `/en${currentPath}`;
+} else {
+  targetPath = currentPath.replace('/en', '') || '/';
+}
+---
+
+<ul class="lang-picker">
+  {
+    Object.entries(languages).map(([l, label]) => (
+      <li>
+        <a href={translatePath(currentPath.replace(`/${lang}`, '') || '/', l)} class={lang === l ? 'active' : ''}>
+          {label}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .lang-picker {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+  .lang-picker a {
+    text-decoration: none;
+    color: var(--gray);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+  .lang-picker a.active {
+    color: var(--black);
+    font-weight: bold;
+    background: rgba(var(--gray-light), 0.5);
+  }
+</style>

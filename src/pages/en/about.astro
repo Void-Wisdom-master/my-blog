@@ -1,0 +1,32 @@
+---
+import { Image } from "astro:assets";
+import AboutHeroImage from "../../assets/cat.webp";
+import Layout from "../../layouts/AboutLayout.astro";
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout
+	title={t('nav.about')}
+	description="About Buchun Mountain, and the stories in this silent nook."
+>
+	<Image slot="image" src={AboutHeroImage} alt="Profile" />
+
+	<section>
+		<h2>Why this blog?</h2>
+		<p>
+			First of all, writing is my hobby. I'd like to try something new to entertain myself.
+			In this nook, I record my games, thoughts, and of course, practicing English proficiency is also a key goal.
+		</p>
+
+		<h2>My Journey</h2>
+		<p>
+			I am currently on a learning road, especially exploring the world of AI.
+			In this fast-paced era, writing allows me to slow down and contemplate things that are "eternal."
+		</p>
+		
+		<p>This is not just a notebook, but a tiny window for me to communicate with the world.</p>
+	</section>
+</Layout>

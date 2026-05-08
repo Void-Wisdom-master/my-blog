@@ -1,0 +1,83 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const posts = (await getCollection("blog", ({ id }) => {
+	return id.startsWith(`${lang}/`);
+}))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		<BaseHead title={t('site.title')} description={t('site.description')} />
+		<style>
+			main {
+				width: 960px;
+			}
+			.recent-posts {
+				margin-top: 3rem;
+			}
+			.post-list {
+				list-style: none;
+				padding: 0;
+			}
+			.post-item {
+				margin-bottom: 1.5rem;
+			}
+			.post-item a {
+				text-decoration: none;
+				color: var(--black);
+			}
+			.post-item a:hover {
+				color: var(--accent);
+			}
+			.post-item h3 {
+				margin: 0;
+				font-size: 1.5rem;
+			}
+			.post-item .date {
+				color: var(--gray);
+				font-size: 0.9rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>{t('nav.home')}</h1>
+			<p>{t('site.description')}</p>
+
+			<section class="recent-posts">
+				<h2>{t('home.recentPosts')}</h2>
+				<ul class="post-list">
+					{
+						posts.length > 0 ? (
+							posts.map((post) => (
+								<li class="post-item">
+									<a href={translatePath(`/blog/${post.id.replace(`${lang}/`, '')}`)}>
+										<FormattedDate date={post.data.pubDate} />
+										<h3>{post.data.title}</h3>
+									</a>
+								</li>
+							))
+						) : (
+							<p>{t('blog.noPosts')}</p>
+						)
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

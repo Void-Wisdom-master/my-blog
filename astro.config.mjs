@@ -6,7 +6,14 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: 'https://buchun.mountain',
+	i18n: {
+		defaultLocale: 'zh',
+		locales: ['zh', 'en'],
+		routing: {
+			prefixDefaultLocale: false,
+		},
+	},
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{
