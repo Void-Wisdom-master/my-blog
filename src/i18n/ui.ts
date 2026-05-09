@@ -15,6 +15,8 @@ export const ui = {
     'home.recentPosts': '最新文章',
     'blog.title': '不春山 | 博客',
     'blog.noPosts': '暂无文章',
+    'category.reflections': '碎笔思考',
+    'category.tech': '技术留影',
     'footer.copyright': '版权所有。',
   },
   en: {
@@ -26,6 +28,8 @@ export const ui = {
     'home.recentPosts': 'Recent Posts',
     'blog.title': 'Buchun Mountain | Blog',
     'blog.noPosts': 'No posts found',
+    'category.reflections': 'Reflections',
+    'category.tech': 'Tech Snapshots',
     'footer.copyright': 'All rights reserved.',
   },
 } as const;

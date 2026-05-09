@@ -16,6 +16,15 @@ const posts = (await getCollection('blog', ({ id }) => {
 })).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const categories = ['reflections', 'tech'];
+const groupedPosts = categories.map(cat => ({
+    id: cat,
+    name: t(`category.${cat}` as any),
+    posts: posts.filter(post => post.data.category === cat)
+})).filter(group => group.posts.length > 0);
+
+const uncategorizedPosts = posts.filter(post => !post.data.category || !categories.includes(post.data.category));
 ---
 
 <!doctype html>
@@ -75,6 +84,15 @@ const posts = (await getCollection('blog', ({ id }) => {
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
+			.category-header {
+				margin: 3rem 0 1.5rem 0;
+				padding-bottom: 0.5rem;
+				border-bottom: 1px solid rgba(var(--gray), 0.2);
+				color: rgb(var(--black));
+				font-size: 1.8rem;
+				font-weight: 700;
+				letter-spacing: 0.05em;
+			}
 			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
@@ -96,23 +114,48 @@ const posts = (await getCollection('blog', ({ id }) => {
 		<Header />
 		<main>
 			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={translatePath(`/blog/${post.id.replace(`${lang}/`, '')}`)}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
+				{
+					uncategorizedPosts.length > 0 && (
+						<ul>
+							{uncategorizedPosts.map((post) => (
+								<li>
+									<a href={translatePath(`/blog/${post.id.replace(`${lang}/`, '')}`)}>
+										{post.data.heroImage && (
+											<Image width={720} height={360} src={post.data.heroImage} alt="" />
+										)}
+										<h4 class="title">{post.data.title}</h4>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+									</a>
+								</li>
+							))}
+						</ul>
+					)
+				}
+
+				{
+					groupedPosts.map((group) => (
+						<div class="category-section">
+							<h2 class="category-header">{group.name}</h2>
+							<ul>
+								{group.posts.map((post) => (
+									<li>
+										<a href={translatePath(`/blog/${post.id.replace(`${lang}/`, '')}`)}>
+											{post.data.heroImage && (
+												<Image width={720} height={360} src={post.data.heroImage} alt="" />
+											)}
+											<h4 class="title">{post.data.title}</h4>
+											<p class="date">
+												<FormattedDate date={post.data.pubDate} />
+											</p>
+										</a>
+									</li>
+								))}
+							</ul>
+						</div>
+					))
+				}
 			</section>
 		</main>
 		<Footer />
